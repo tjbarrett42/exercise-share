@@ -36,7 +36,7 @@ const Home = () => {
 
   const handleKeyPress = (e) => {
     if(e.keyCode === 13) {
-
+        searchPost();
     }
   };
 
@@ -63,12 +63,12 @@ const Home = () => {
                   label="Search Tags"
                   variant="outlined"
                 />
-                <Button onClick={searchPost} className={classes.searchButton} color="primary">Search</Button>
+                <Button onClick={searchPost} className={classes.searchButton} variant="contained" color="primary">Search</Button>
               </AppBar>
               
               <Form currentId={currentId} setCurrentId={setCurrentId} />
               {(!searchQuery && !tags.length) && (
-                <Paper elevation={6} className={classes.pagination}>
+                <Paper className={classes.pagination} elevation={6}>
                   <Pagination page={page}/>
                 </Paper>
               )}

@@ -6,6 +6,7 @@ import { useNavigate } from 'react-router-dom';
 
 import Icon from './icon';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
+import { AUTH } from '../../constants/actionTypes';
 import useStyles from './styles';
 
 import Input from './Input';
@@ -47,7 +48,7 @@ const Auth = () => {
         const token = res?.tokenId;
 
         try {
-            dispatch({type: 'AUTH', data: {result, token}});
+            dispatch({type: AUTH, data: {result, token}});
             navigate("/");
         } catch (error) {
             console.log(error);
@@ -58,8 +59,6 @@ const Auth = () => {
         console.log("google sign in was unsuccessful")
     };
 
-
-    console.log('at auth');
     return (
         <Container component="main" maxWidth="xs">
             <Paper className={classes.paper} elevation={3}>

@@ -1,4 +1,4 @@
-import { FETCH_ALL, FETCH_POST, FETCH_BY_SEARCH, START_LOADING, END_LOADING, CREATE, UPDATE, DELETE, LIKE } from '../constants/actionTypes';
+import { FETCH_ALL, FETCH_POST, FETCH_BY_SEARCH, START_LOADING, END_LOADING, CREATE, UPDATE, DELETE, LIKE, COMMENT } from '../constants/actionTypes';
 
 import * as api from '../api/index.js';
 
@@ -7,10 +7,7 @@ export const getPost = (id) => async (dispatch) => {
     dispatch({ type: START_LOADING });
     const { data } = await api.fetchPost(id);
 
-    console.log({ data});
-
-    dispatch({ type: FETCH_POST, payload: data });
-    dispatch({ type: END_LOADING });
+    dispatch({ type: FETCH_POST, payload: { post: data }});
   } catch (error) {
     console.log(error);
   }
@@ -19,11 +16,9 @@ export const getPost = (id) => async (dispatch) => {
 export const getPosts = (page) => async (dispatch) => {
   try {
     dispatch({ type: START_LOADING });
-    const { data } = await api.fetchPosts(page);
+    const { data: { data, currentPage, numberOfPages } } = await api.fetchPosts(page);
 
-    console.log({ data});
-
-    dispatch({ type: FETCH_ALL, payload: data });
+    dispatch({ type: FETCH_ALL, payload: { data, currentPage, numberOfPages } });
     dispatch({ type: END_LOADING });
   } catch (error) {
     console.log(error);
@@ -35,23 +30,22 @@ export const getPostsBySearch = (searchQuery) => async (dispatch) => {
     dispatch({ type: START_LOADING });
     const { data: { data } } = await api.fetchPostsBySearch(searchQuery);
     
-    dispatch({ type: FETCH_BY_SEARCH, payload: data });
+    dispatch({ type: FETCH_BY_SEARCH, payload: { data } });
     dispatch({ type: END_LOADING });
   } catch (error) {
     console.log(error);
   }
-}
+};
 
 export const createPost = (post, navigate) => async (dispatch) => {
   try {
     dispatch({ type: START_LOADING });
     const { data } = await api.createPost(post);
 
-    navigate(`/posts/${data._id}`);
-
     dispatch({ type: CREATE, payload: data });
+    navigate(`/posts/${data._id}`);
   } catch (error) {
-    console.log(error.message);
+    console.log(error);
   }
 };
 
@@ -61,17 +55,31 @@ export const updatePost = (id, post) => async (dispatch) => {
 
     dispatch({ type: UPDATE, payload: data });
   } catch (error) {
-    console.log(error.message);
+    console.log(error);
   }
 };
 
 export const likePost = (id) => async (dispatch) => {
+  const user = JSON.parse(localStorage.getItem('profile'));
+
   try {
-    const { data } = await api.likePost(id);
+    const { data } = await api.likePost(id, user?.token);
 
     dispatch({ type: LIKE, payload: data });
   } catch (error) {
-    console.log(error.message);
+    console.log(error);
+  }
+};
+
+export const commentPost = (value, id) => async (dispatch) => {
+  try {
+    const { data } = await api.comment(value, id);
+
+    dispatch({ type: COMMENT, payload: data });
+
+    return data.comments;
+  } catch (error) {
+    console.log(error);
   }
 };
 
@@ -81,6 +89,6 @@ export const deletePost = (id) => async (dispatch) => {
 
     dispatch({ type: DELETE, payload: id });
   } catch (error) {
-    console.log(error.message);
+    console.log(error);
   }
 };
