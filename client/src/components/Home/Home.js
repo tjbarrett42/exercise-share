@@ -8,6 +8,7 @@ import Posts from '../Posts/Posts';
 import Form from '../Form/Form';
 import Pagination from '../Pagination';
 import useStyles from './styles';
+import Footer from '../Footer/Footer';
 
 function useQuery() {
   return new URLSearchParams(useLocation().search);
@@ -94,7 +95,10 @@ const Home = () => {
               
             </Grid>
           </Grid>
+          <Footer/>
         </Container>
+        
+        
       </Grow>
   );
 }
