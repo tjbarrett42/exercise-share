@@ -1,38 +1,44 @@
-import React, { useState, useEffect } from 'react';
-import { Container, Grow, Grid, Paper, AppBar, TextField, Button } from '@material-ui/core';
+import React, { useState } from 'react';
+import { Container, Grow, Grid, Paper, AppBar, TextField, Button, Checkbox } from '@material-ui/core';
 import { useDispatch } from 'react-redux';
-import { getPosts, getPostsBySearch } from '../../actions/posts';
-import { useNavigate, useLocation } from 'react-router-dom';
+import { useNavigate, useLocation, Link } from 'react-router-dom';
 import ChipInput from 'material-ui-chip-input';
-import Pagination from '../Pagination';
+import { getPostsBySearch } from '../../actions/posts';
 import Posts from '../Posts/Posts';
 import Form from '../Form/Form';
+import Pagination from '../Pagination';
 import useStyles from './styles';
-
 
 function useQuery() {
   return new URLSearchParams(useLocation().search);
 }
-
 const Home = () => {
-    const [currentId, setCurrentId] = useState(0);
-  const dispatch = useDispatch();
+  const user = JSON.parse(localStorage.getItem('profile'));
+  const classes = useStyles();
   const query = useQuery();
-  const navigate = useNavigate();
   const page = query.get('page') || 1;
   const searchQuery = query.get('searchQuery');
-  const classes = useStyles();
+  const [currentId, setCurrentId] = useState(0);
+  const dispatch = useDispatch();
   const [ search, setSearch ] = useState('');
   const [ tags, setTags ] = useState([]);
+  const navigate = useNavigate();
+  // const [ likeFilterId, setLikeFilterOn ] = useState('');
+  // const [ likeFilterOn, setLikeFilterId ] = useState(false);
 
   const searchPost = () => {
     if(search.trim() || tags){
-      dispatch(getPostsBySearch({ search, tags: tags.join(',') }));
-      navigate(`/posts/search?searchQuery=${search || 'none'}&tags=${tags.join(',')}`);
+      dispatch(getPostsBySearch({ search, tags: tags.join(',')}));
+      navigate(`/posts/search?searchQuery=${search || 'none'}&tags=${tags.join(',') || 'none'}`);
+      
+      // TODO: Implement filtering by like ID
+      // dispatch(getPostsBySearch({ search, tags: tags.join(','), likeFilterId }));
+      // navigate(`/posts/search?searchQuery=${search || 'none'}&tags=${tags.join(',')}&likeFilterId=${likeFilterId}`);
+      // console.log('search query: ', search, ' tag query: ', tags, ' likeFilterId: ', likeFilterId);
     } else {
       navigate("/");
     }
-  }
+  };
 
   const handleKeyPress = (e) => {
     if(e.keyCode === 13) {
@@ -43,7 +49,18 @@ const Home = () => {
   const handleAdd = (tag) => setTags([...tags, tag]);
 
   const handleDelete = (tagToDelete) => setTags(tags.filter((tag) => tag !== tagToDelete));
-
+  
+  // TODO: Implement filtering by like ID
+  // const handleLikeFilter = (prevLikeFilterOn) => {
+  //   if (likeFilterOn) {
+  //     setLikeFilterOn(false);
+  //     setLikeFilterId(null);
+  //   } else {
+  //     setLikeFilterOn(true);
+  //     setLikeFilterId(user?.result?.googleId);
+  //   }
+  //   console.log('user info', user?.result?.googleId);
+  // };
   
   return (
     <Grow in>
@@ -63,7 +80,9 @@ const Home = () => {
                   label="Search Tags"
                   variant="outlined"
                 />
+                {/* TODO: Implement like filter checkbox/toggle <Checkbox onClick={handleLikeFilter} label="My Likes Only"></Checkbox> */}
                 <Button onClick={searchPost} className={classes.searchButton} variant="contained" color="primary">Search</Button>
+                <Button component={Link} to="/" variant="outlined" color="primary" size="small" fullWidth>Clear search</Button>
               </AppBar>
               
               <Form currentId={currentId} setCurrentId={setCurrentId} />

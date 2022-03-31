@@ -22,13 +22,14 @@ export const getPosts = async (req, res) => {
 }
 
 export const getPostsBySearch = async (req, res) => {
+    // TODO: Implement like filtering - Note: this has been breaking the recommended exercises in PostDetails.js component
     const { searchQuery, tags } = req.query;
-
+    // const { searchQuery, tags, likeFilterId } = req.query;
     try {
         const title = new RegExp(searchQuery, "i");
 
         const posts = await PostMessage.find({ $or: [ { title }, { tags: { $in: tags.split(',') } } ]});
-
+        //const posts = await PostMessage.find({ $and: [ { $or: [ { title }, { tags: { $in: tags.split(',') } } ] }, { likes: { $in: likeFilterId}}] } );
         res.json({ data: posts });
     } catch (error) {    
         res.status(404).json({ message: error.message });
