@@ -24,24 +24,24 @@ const Auth = () => {
 
     const handleShowPassword = () => setShowPassword((prevShowPassword) => !prevShowPassword );
 
+    const switchMode = () => {
+        setFormData(initialState);
+        setIsSignup((prevIsSignup) => !prevIsSignup);
+        setShowPassword(false);
+    };
     const handleSubmit = (e) => {
         e.preventDefault();
         
         if(isSignup) {
-            dispatch(signup(formData, navigate))
+            dispatch(signup(formData, navigate));
         } else {
-            dispatch(signin(formData, navigate))
+            dispatch(signin(formData, navigate));
         }
     }
 
-    const handleChange = (e) => {
-        setFormData({ ... formData, [e.target.name]: e.target.value })
-    }   
+      
 
-    const switchMode = () => {
-        setIsSignup((prevIsSignup) => !prevIsSignup);
-        setShowPassword(false);
-    }
+    
 
     const googleSuccess = async (res) => {
         const result = res?.profileObj; 
@@ -58,6 +58,7 @@ const Auth = () => {
         console.log(error);
         console.log("google sign in was unsuccessful")
     };
+    const handleChange = (e) => setFormData({ ... formData, [e.target.name]: e.target.value });
 
     return (
         <Container component="main" maxWidth="xs">

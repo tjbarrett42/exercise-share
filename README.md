@@ -2,6 +2,10 @@
 
 Share and save your favorite exercises!\
 A fullstack project utilizing MongoDB, Express, React, Redux, and Node.js. 
+
+![](client/src/images/ES1.png)
+![](client/src/images/ES2.png)
+
 ## Running the App
 
 In  `client` and `server`, install dependencies:
@@ -46,3 +50,7 @@ Not sure what else to add to your routine? Each exercise page will recommend var
 - In-app youtube webplayer for demonstrating exercises
 - User stats
 - Night mode
+
+## Issues
+
+- Currently tracking issues in repo 'issues' panel

@@ -1,6 +1,7 @@
 import React from 'react';
 import { Box, Typography } from '@material-ui/core';
 import useStyles from './styles';
+import GithubIcon from '@material-ui/icons/GitHub';
 
 /* Typical footer component */
 const Footer = () => {
@@ -10,10 +11,11 @@ const Footer = () => {
             <Box className={classes.footerBox} textAlign="center" >
                 <Typography variant="subtitle1">
                     <p>
-                        Timothy Barrett &copy; {new Date().getFullYear()}
+                        Timothy Barrett &copy; {new Date().getFullYear()} <sp/>
                     </p>
                     <p>
-                        <a href="https://github.com/tjbarrett42/exercise-share">Github Repo</a>
+                        <GithubIcon className={classes.clickableIcon} onClick={(e) => window.open("https://github.com/tjbarrett42/exercise-share", '_blank')}/>
+
                     </p>
                 </Typography>
             </Box>
