@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API = axios.create({ baseURL: 'https://exercise-share.herokuapp.com/' });
+const API = axios.create({ baseURL: 'https://exercise-share-cddce65a60d3.herokuapp.com/' });
 // const API = axios.create({ baseURL: 'http://localhost:5000' });
 
 API.interceptors.request.use((req) => {

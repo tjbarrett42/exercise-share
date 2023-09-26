@@ -13,13 +13,22 @@ dotenv.config();
 
 app.use(bodyParser.json({ limit: "30mb", extended: true }));
 app.use(bodyParser.urlencoded({ limit: "30mb", extended: true }));
+
 app.use(cors());
+app.options('*', (req, res) => {
+    // set CORS headers
+    res.header("Access-Control-Allow-Origin", "https://exercise-share.netlify.app");
+    res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE");
+    res.header("Access-Control-Allow-Headers", "Content-Type, Authorization");
+    res.sendStatus(200);
+});
+
 
 app.use('/posts', postRoutes);
 app.use('/user', userRoutes);
 
 app.get('/', (req, res) => {
-    res.send('Hello to ExerciseShare API 2');
+    res.send('Hello to ExerciseShare API 3');
 });
 
 // Connect server app with db
